@@ -17,14 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import io.github.vbelles.billboard.model.ContentNode
-import io.github.vbelles.billboard.model.Strip
+import io.github.vbelles.billboard.data.model.Node
+import io.github.vbelles.billboard.data.model.Strip
 
 
 private val mockStrips = List(10) { strip ->
     Strip(title = "Strip $strip", subtitle = "", nodes = List(10) { node ->
         val id = strip * 100 + node + 1
-        ContentNode(
+        Node(
             id = "$id",
             title = "Node $id",
             poster = "https://picsum.photos/seed/$id/200/300"
@@ -72,7 +72,7 @@ fun StripComponent(strip: Strip) {
 }
 
 @Composable
-fun NodeComponent(node: ContentNode) {
+fun NodeComponent(node: Node) {
     Card(shape = RoundedCornerShape(18.dp)) {
         Image(
             painter = rememberImagePainter(node.poster) { crossfade(true) },

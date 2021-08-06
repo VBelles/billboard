@@ -1,6 +1,6 @@
-package io.github.vbelles.billboard.model
+package io.github.vbelles.billboard.data.model
 
-data class ContentNode(
+data class Node(
     val id: String,
     val title: String,
     val poster: String,

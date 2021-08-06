@@ -1,4 +1,4 @@
-package io.github.vbelles.billboard
+package io.github.vbelles.billboard.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

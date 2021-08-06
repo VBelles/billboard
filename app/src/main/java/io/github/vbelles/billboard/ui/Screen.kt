@@ -1,4 +1,4 @@
-package io.github.vbelles.billboard
+package io.github.vbelles.billboard.ui
 
 sealed class Screen(val route: String) {
     object Movies : Screen("movies")
