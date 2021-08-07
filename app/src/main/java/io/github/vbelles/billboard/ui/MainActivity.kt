@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import io.github.vbelles.billboard.ui.screens.main.MainScreen
 import io.github.vbelles.billboard.ui.theme.BillboardTheme
 
 class MainActivity : ComponentActivity() {
