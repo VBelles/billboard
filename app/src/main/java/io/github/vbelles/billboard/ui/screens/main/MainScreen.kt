@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.insets.navigationBarsPadding
 import io.github.vbelles.billboard.data.model.Section
 import io.github.vbelles.billboard.ui.screens.PeopleScreen
 import io.github.vbelles.billboard.ui.screens.page.PageScreen
@@ -47,7 +48,7 @@ fun MainScreen(state: SectionsState) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
-            BottomNavigation(backgroundColor = MaterialTheme.colors.surface) {
+            BottomNavigation(backgroundColor = MaterialTheme.colors.surface, modifier = Modifier.navigationBarsPadding()) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 state.sections.forEach { section ->
                     BottomNavigationItem(

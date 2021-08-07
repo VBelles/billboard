@@ -11,6 +11,7 @@ data class StripState(
 )
 
 data class PageState(
+    val title: String,
     val isLoading: Boolean = false,
     val strips: List<StripState> = emptyList(),
 )
