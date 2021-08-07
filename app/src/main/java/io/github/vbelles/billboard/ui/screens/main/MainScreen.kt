@@ -33,7 +33,7 @@ fun NavigationComponent(sections: List<Section>, navController: NavHostControlle
         sections.forEach { section ->
             composable(section.name) {
                 when (section.sectionType) {
-                    Section.SectionType.Page -> PageScreen(navController, section.name, section)
+                    Section.SectionType.Page -> PageScreen(navController, section)
                     Section.SectionType.People -> PeopleScreen(navController, section.name)
                 }
             }

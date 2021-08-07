@@ -32,7 +32,7 @@ val appModule = module {
         )
     }
     viewModel { MainViewModel(get()) }
-    viewModel { PageViewModel(get()) }
+    viewModel { parameters -> PageViewModel(get(), parameters.get()) }
 }
 
 private fun buildHttpClient(): OkHttpClient {

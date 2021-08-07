@@ -10,17 +10,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PageViewModel(private val contentRepository: ContentRepository) : ViewModel() {
+class PageViewModel(private val contentRepository: ContentRepository, strips: List<Strip>) : ViewModel() {
 
-
-    private val _state = MutableStateFlow(PageState())
+    private val _state = MutableStateFlow(
+        PageState(strips = strips.map { strip -> StripState(source = strip.source, title = strip.name) })
+    )
     val state: StateFlow<PageState> = _state.asStateFlow()
-
-    fun start(strips: List<Strip>) {
-        if (_state.value.strips.isEmpty()) {
-            _state.update { it.copy(strips = strips.map { strip -> StripState(source = strip.source, title = strip.name) }) }
-        }
-    }
 
     fun loadStrip(source: String) {
         viewModelScope.launch {

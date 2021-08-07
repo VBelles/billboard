@@ -22,13 +22,11 @@ import coil.compose.rememberImagePainter
 import io.github.vbelles.billboard.data.model.Content
 import io.github.vbelles.billboard.data.model.Section
 import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
-fun PageScreen(navController: NavController, title: String?, section: Section) {
-    val viewModel: PageViewModel = getViewModel()
-    LaunchedEffect(viewModel) {
-        viewModel.start(section.strips)
-    }
+fun PageScreen(navController: NavController, section: Section) {
+    val viewModel: PageViewModel = getViewModel { parametersOf(section.strips) }
     val pageState by viewModel.state.collectAsState()
     PageScreen(pageState) { source ->
         viewModel.loadStrip(source)
