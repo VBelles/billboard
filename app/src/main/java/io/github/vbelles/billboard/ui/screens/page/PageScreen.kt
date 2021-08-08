@@ -1,6 +1,7 @@
 package io.github.vbelles.billboard.ui.screens.page
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,7 +27,7 @@ import io.github.vbelles.billboard.data.model.Section
 import io.github.vbelles.billboard.ui.components.Toolbar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.math.max
+import kotlin.math.min
 
 @Composable
 fun PageScreen(navController: NavController, section: Section) {
@@ -48,7 +49,7 @@ fun PageScreen(pageState: PageState, onLoad: (String) -> Unit) {
     }
     var alpha = 0.8f
     if (listState.firstVisibleItemIndex == 0) {
-        alpha = max(alpha, listState.firstVisibleItemScrollOffset / 200f)
+        alpha = min(alpha, listState.firstVisibleItemScrollOffset / 200f)
     }
     Toolbar(title = pageState.title, alpha = alpha)
 }
@@ -59,11 +60,24 @@ fun StripComponent(strip: StripState, onLoad: (String) -> Unit) {
         onLoad(strip.source)
     }
     Column {
-        Text(
-            text = strip.title,
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(horizontal = 20.dp),
-        )
+        Row {
+            Text(
+                text = strip.title,
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(horizontal = 20.dp),
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "View more",
+                style = MaterialTheme.typography.subtitle1,
+                color = MaterialTheme.colors.secondary,
+                modifier = Modifier
+                    .clickable { }
+                    .padding(4.dp),
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+        }
+
         Spacer(modifier = Modifier.size(8.dp))
         LazyRow {
             if (strip.isLoading) {
