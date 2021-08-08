@@ -1,14 +1,12 @@
 package io.github.vbelles.billboard.ui.screens.page
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,12 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
-import io.github.vbelles.billboard.data.model.Content
 import io.github.vbelles.billboard.data.model.Section
+import io.github.vbelles.billboard.ui.components.NodeComponent
+import io.github.vbelles.billboard.ui.components.PlaceholderNode
 import io.github.vbelles.billboard.ui.components.Toolbar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -79,32 +74,16 @@ fun StripComponent(strip: StripState, onLoad: (String) -> Unit) {
         }
 
         Spacer(modifier = Modifier.size(8.dp))
-        LazyRow {
+        LazyRow(
+            horizontalArrangement = spacedBy(10.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp)
+        ) {
             if (strip.isLoading) {
-                items(4) {
-                    Spacer(modifier = Modifier.size(10.dp))
-                    NodeComponent(null)
-                }
+                items(4) { PlaceholderNode() }
             } else {
-                items(strip.contents) { content ->
-                    Spacer(modifier = Modifier.size(10.dp))
-                    NodeComponent(content)
-                }
+                items(strip.contents) { content -> NodeComponent(content) }
             }
         }
     }
 
-}
-
-@Composable
-fun NodeComponent(content: Content?) {
-    Card(shape = RoundedCornerShape(18.dp)) {
-        Image(
-            painter = rememberImagePainter(content?.posterPath) { crossfade(true) },
-            contentDescription = content?.title,
-            modifier = Modifier
-                .size(120.dp, 180.dp)
-                .placeholder(visible = content == null, highlight = PlaceholderHighlight.shimmer())
-        )
-    }
 }
