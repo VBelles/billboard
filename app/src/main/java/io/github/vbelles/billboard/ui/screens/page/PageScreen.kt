@@ -94,17 +94,13 @@ fun StripComponent(strip: StripState, onLoad: (String) -> Unit) {
 
 @Composable
 fun NodeComponent(content: Content?) {
-    Card(
-        shape = RoundedCornerShape(18.dp),
-        modifier = Modifier.placeholder(
-            visible = content == null,
-            highlight = PlaceholderHighlight.shimmer(),
-        )
-    ) {
+    Card(shape = RoundedCornerShape(18.dp)) {
         Image(
             painter = rememberImagePainter(content?.posterPath) { crossfade(true) },
             contentDescription = content?.title,
-            modifier = Modifier.size(120.dp, 180.dp)
+            modifier = Modifier
+                .size(120.dp, 180.dp)
+                .placeholder(visible = content == null, highlight = PlaceholderHighlight.shimmer())
         )
     }
 }
