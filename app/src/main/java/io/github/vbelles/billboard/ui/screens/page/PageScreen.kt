@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 import io.github.vbelles.billboard.data.model.Content
 import io.github.vbelles.billboard.data.model.Section
 import org.koin.androidx.compose.getViewModel
@@ -66,12 +69,23 @@ fun StripComponent(strip: StripState, onLoad: (String) -> Unit) {
         onLoad(strip.source)
     }
     Column {
-        Text(text = strip.title, style = MaterialTheme.typography.h6, modifier = Modifier.padding(horizontal = 20.dp))
+        Text(
+            text = strip.title,
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier.padding(horizontal = 20.dp),
+        )
         Spacer(modifier = Modifier.size(8.dp))
         LazyRow {
-            items(strip.contents) { content ->
-                Spacer(modifier = Modifier.size(10.dp))
-                NodeComponent(content)
+            if (strip.isLoading) {
+                items(4) {
+                    Spacer(modifier = Modifier.size(10.dp))
+                    NodeComponent(null)
+                }
+            } else {
+                items(strip.contents) { content ->
+                    Spacer(modifier = Modifier.size(10.dp))
+                    NodeComponent(content)
+                }
             }
         }
     }
@@ -79,11 +93,17 @@ fun StripComponent(strip: StripState, onLoad: (String) -> Unit) {
 }
 
 @Composable
-fun NodeComponent(content: Content) {
-    Card(shape = RoundedCornerShape(18.dp)) {
+fun NodeComponent(content: Content?) {
+    Card(
+        shape = RoundedCornerShape(18.dp),
+        modifier = Modifier.placeholder(
+            visible = content == null,
+            highlight = PlaceholderHighlight.shimmer(),
+        )
+    ) {
         Image(
-            painter = rememberImagePainter(content.posterPath) { crossfade(true) },
-            contentDescription = content.title,
+            painter = rememberImagePainter(content?.posterPath) { crossfade(true) },
+            contentDescription = content?.title,
             modifier = Modifier.size(120.dp, 180.dp)
         )
     }

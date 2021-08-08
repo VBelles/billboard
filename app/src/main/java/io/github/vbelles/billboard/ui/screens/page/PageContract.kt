@@ -5,6 +5,7 @@ import io.github.vbelles.billboard.data.model.Content
 
 data class StripState(
     val isLoading: Boolean = false,
+    val isError: Boolean = false,
     val source: String,
     val title: String,
     val contents: List<Content> = emptyList(),
@@ -12,6 +13,5 @@ data class StripState(
 
 data class PageState(
     val title: String,
-    val isLoading: Boolean = false,
     val strips: List<StripState> = emptyList(),
 )
