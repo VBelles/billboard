@@ -26,6 +26,7 @@ import io.github.vbelles.billboard.data.model.Section
 import io.github.vbelles.billboard.ui.components.Toolbar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.math.max
 
 @Composable
 fun PageScreen(navController: NavController, section: Section) {
@@ -45,9 +46,9 @@ fun PageScreen(pageState: PageState, onLoad: (String) -> Unit) {
             StripComponent(strip, onLoad)
         }
     }
-    val alpha = when (listState.firstVisibleItemIndex) {
-        0 -> (listState.firstVisibleItemScrollOffset / 200f).coerceAtMost(0.7f)
-        else -> 0.7f
+    var alpha = 0.8f
+    if (listState.firstVisibleItemIndex == 0) {
+        alpha = max(alpha, listState.firstVisibleItemScrollOffset / 200f)
     }
     Toolbar(title = pageState.title, alpha = alpha)
 }
