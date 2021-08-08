@@ -3,9 +3,11 @@ package io.github.vbelles.billboard.ui.screens.main
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -16,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.github.vbelles.billboard.data.model.Section
 import io.github.vbelles.billboard.ui.screens.PeopleScreen
 import io.github.vbelles.billboard.ui.screens.page.PageScreen
@@ -46,6 +49,16 @@ fun NavigationComponent(sections: List<Section>, navController: NavHostControlle
 @Composable
 fun MainScreen(state: SectionsState) {
     val navController = rememberNavController()
+
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = MaterialTheme.colors.isLight
+    val navigationBarColor = MaterialTheme.colors.surface
+
+    SideEffect {
+        systemUiController.setStatusBarColor(color = Color.Transparent, darkIcons = useDarkIcons)
+        systemUiController.setNavigationBarColor(color = navigationBarColor, darkIcons = useDarkIcons)
+    }
+
     Scaffold(
         bottomBar = {
             BottomNavigation(backgroundColor = MaterialTheme.colors.surface, modifier = Modifier.navigationBarsPadding()) {

@@ -1,7 +1,6 @@
 package io.github.vbelles.billboard.ui.screens.page
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -11,22 +10,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 import io.github.vbelles.billboard.data.model.Content
 import io.github.vbelles.billboard.data.model.Section
+import io.github.vbelles.billboard.ui.components.Toolbar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -52,15 +49,7 @@ fun PageScreen(pageState: PageState, onLoad: (String) -> Unit) {
         0 -> (listState.firstVisibleItemScrollOffset / 200f).coerceAtMost(0.7f)
         else -> 0.7f
     }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.primarySurface.copy(alpha = alpha))
-            .statusBarsPadding()
-            .padding(vertical = 10.dp)
-    ) {
-        Text(style = MaterialTheme.typography.h5, text = pageState.title, modifier = Modifier.align(Alignment.Center))
-    }
+    Toolbar(title = pageState.title, alpha = alpha)
 }
 
 @Composable
