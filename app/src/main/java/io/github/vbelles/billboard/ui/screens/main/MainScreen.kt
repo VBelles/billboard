@@ -52,7 +52,7 @@ fun NavigationComponent(sections: List<Section>, navController: NavHostControlle
             GridScreen(navController, source)
         }
         composable("details/{id}") {
-            DetailsScreen(navController, it.arguments?.getString("id")!!)
+            DetailsScreen(navController, it.arguments?.getString("id")?.toInt()!!)
         }
     }
 }
