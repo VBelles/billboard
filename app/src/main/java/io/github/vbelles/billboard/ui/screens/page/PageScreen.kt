@@ -14,32 +14,43 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import io.github.vbelles.billboard.data.model.Section
 import io.github.vbelles.billboard.ui.components.NodeComponent
 import io.github.vbelles.billboard.ui.components.PlaceholderNode
 import io.github.vbelles.billboard.ui.components.Toolbar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
+import java.net.URLEncoder
 import kotlin.math.min
 
 @Composable
-fun PageScreen(navController: NavController, section: Section) {
+fun PageScreen(navController: NavController, section: Section, innerPadding: PaddingValues) {
     val viewModel: PageViewModel = getViewModel { parametersOf(section) }
     val pageState by viewModel.state.collectAsState()
-    PageScreen(pageState) { source ->
-        viewModel.loadStrip(source)
+    PageScreen(pageState, innerPadding, viewModel::loadStrip) { source ->
+        navController.navigate("grid/${URLEncoder.encode(source, "utf-8")}")
     }
 }
 
 @Composable
-fun PageScreen(pageState: PageState, onLoad: (String) -> Unit) {
+fun PageScreen(pageState: PageState, innerPadding: PaddingValues, onLoad: (String) -> Unit, onViewMoreClicked: (String) -> Unit) {
     val listState = rememberLazyListState()
-    LazyColumn(state = listState, contentPadding = PaddingValues(vertical = 56.dp)) {
+    LazyColumn(
+        state = listState,
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.systemBars,
+            additionalTop = 56.dp,
+            additionalBottom = innerPadding.calculateBottomPadding()
+        )
+    ) {
         items(pageState.strips) { strip ->
             Spacer(modifier = Modifier.size(20.dp))
-            StripComponent(strip, onLoad)
+            StripComponent(strip, onLoad, onViewMoreClicked)
         }
     }
     var alpha = 0.8f
@@ -50,7 +61,7 @@ fun PageScreen(pageState: PageState, onLoad: (String) -> Unit) {
 }
 
 @Composable
-fun StripComponent(strip: StripState, onLoad: (String) -> Unit) {
+fun StripComponent(strip: StripState, onLoad: (String) -> Unit, onViewMoreClicked: (String) -> Unit) {
     LaunchedEffect(strip.source) {
         onLoad(strip.source)
     }
@@ -64,10 +75,10 @@ fun StripComponent(strip: StripState, onLoad: (String) -> Unit) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "View more",
-                style = MaterialTheme.typography.subtitle1,
+                style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier
-                    .clickable { }
+                    .clickable { onViewMoreClicked(strip.source) }
                     .padding(4.dp),
             )
             Spacer(modifier = Modifier.width(16.dp))

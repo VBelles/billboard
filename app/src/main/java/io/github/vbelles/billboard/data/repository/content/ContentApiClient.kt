@@ -1,6 +1,6 @@
 package io.github.vbelles.billboard.data.repository.content
 
-import io.github.vbelles.billboard.data.dto.ContentListDto
+import io.github.vbelles.billboard.data.dto.PagedContentsDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,6 +16,6 @@ interface ContentApiClient {
         @Query("language") language: String,
         @Query("page") page: Int,
         @Query("region") region: String? = null,
-    ): Response<ContentListDto>
+    ): Response<PagedContentsDto>
 
 }

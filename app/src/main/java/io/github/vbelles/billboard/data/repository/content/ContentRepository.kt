@@ -2,6 +2,7 @@ package io.github.vbelles.billboard.data.repository.content
 
 import io.github.vbelles.billboard.data.dto.ContentDto
 import io.github.vbelles.billboard.data.model.Content
+import io.github.vbelles.billboard.data.model.PagedContents
 import io.github.vbelles.billboard.data.resultOf
 
 class ContentRepository(
@@ -13,8 +14,20 @@ class ContentRepository(
     suspend fun listContents(source: String): Result<List<Content>> {
         return resultOf {
             contentApiClient.listContents(source, apiKey, "en-US", 1)
-        }.map { contentListDto ->
-            contentListDto.results.map { dto -> dto.toContent() }
+        }.map { pagedContentsDto ->
+            pagedContentsDto.results.map { dto -> dto.toContent() }
+        }
+    }
+
+    suspend fun listPagedContents(source: String, page: Int): Result<PagedContents> {
+        return resultOf {
+            contentApiClient.listContents(source, apiKey, "en-US", page)
+        }.map { pagedContentsDto ->
+            PagedContents(
+                contents = pagedContentsDto.results.map { dto -> dto.toContent() },
+                nextPage = (pagedContentsDto.page + 1).takeIf { pagedContentsDto.totalPages > pagedContentsDto.page },
+                page = pagedContentsDto.page,
+            )
         }
     }
 

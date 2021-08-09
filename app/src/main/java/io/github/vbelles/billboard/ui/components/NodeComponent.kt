@@ -3,7 +3,8 @@ package io.github.vbelles.billboard.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
@@ -17,7 +18,7 @@ import io.github.vbelles.billboard.data.model.Content
 
 private val NodeCorner = 18.dp
 private val NodeWidth = 120.dp
-private val NodeHeight = 180.dp
+private const val NodeAspectRatio = 2 / 3f
 
 @Composable
 fun NodeComponent(content: Content) {
@@ -25,7 +26,9 @@ fun NodeComponent(content: Content) {
         Image(
             painter = rememberImagePainter(content.posterPath) { crossfade(true) },
             contentDescription = content.title,
-            modifier = Modifier.size(NodeWidth, NodeHeight),
+            modifier = Modifier
+                .width(NodeWidth)
+                .aspectRatio(NodeAspectRatio),
         )
     }
 }
@@ -35,7 +38,8 @@ fun PlaceholderNode() {
     Card(shape = RoundedCornerShape(NodeCorner)) {
         Box(
             modifier = Modifier
-                .size(NodeWidth, NodeHeight)
+                .width(NodeWidth)
+                .aspectRatio(NodeAspectRatio)
                 .placeholder(visible = true, highlight = PlaceholderHighlight.shimmer()),
         )
     }

@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 private val DarkColorPalette = darkColors(
     primary = Color.DarkGray,
     primaryVariant = Color.DarkGray,
-    secondary = Color(0xFF29B6F6)
+    secondary = Color(0xFF4FC3F7)
 )
 
 private val LightColorPalette = lightColors(
@@ -30,7 +30,7 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun BillboardTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (true) {
+    val colors = if (false) {
         DarkColorPalette
     } else {
         LightColorPalette
