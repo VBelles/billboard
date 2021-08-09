@@ -32,13 +32,18 @@ import kotlin.math.min
 fun PageScreen(navController: NavController, section: Section, innerPadding: PaddingValues) {
     val viewModel: PageViewModel = getViewModel { parametersOf(section) }
     val pageState by viewModel.state.collectAsState()
-    PageScreen(pageState, innerPadding, viewModel::loadStrip) { source ->
-        navController.navigate("grid/${URLEncoder.encode(source, "utf-8")}")
+    PageScreen(pageState, innerPadding) { action ->
+        when (action) {
+            is PageAction.ContentClicked -> navController.navigate("details/${action.id}")
+            is PageAction.StripDisplayed -> viewModel.loadStrip(action.source)
+            is PageAction.ViewMoreClicked ->
+                navController.navigate("grid/${URLEncoder.encode(action.source, "utf-8")}")
+        }
     }
 }
 
 @Composable
-fun PageScreen(pageState: PageState, innerPadding: PaddingValues, onLoad: (String) -> Unit, onViewMoreClicked: (String) -> Unit) {
+fun PageScreen(pageState: PageState, innerPadding: PaddingValues, action: (PageAction) -> Unit) {
     val listState = rememberLazyListState()
     LazyColumn(
         state = listState,
@@ -50,7 +55,7 @@ fun PageScreen(pageState: PageState, innerPadding: PaddingValues, onLoad: (Strin
     ) {
         items(pageState.strips) { strip ->
             Spacer(modifier = Modifier.size(20.dp))
-            StripComponent(strip, onLoad, onViewMoreClicked)
+            StripComponent(strip, action)
         }
     }
     var alpha = 0.8f
@@ -61,9 +66,9 @@ fun PageScreen(pageState: PageState, innerPadding: PaddingValues, onLoad: (Strin
 }
 
 @Composable
-fun StripComponent(strip: StripState, onLoad: (String) -> Unit, onViewMoreClicked: (String) -> Unit) {
+fun StripComponent(strip: StripState, action: (PageAction) -> Unit) {
     LaunchedEffect(strip.source) {
-        onLoad(strip.source)
+        action(PageAction.StripDisplayed(strip.source))
     }
     Column {
         Row {
@@ -78,7 +83,7 @@ fun StripComponent(strip: StripState, onLoad: (String) -> Unit, onViewMoreClicke
                 style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier
-                    .clickable { onViewMoreClicked(strip.source) }
+                    .clickable { action(PageAction.ViewMoreClicked(strip.source)) }
                     .padding(4.dp),
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -92,7 +97,9 @@ fun StripComponent(strip: StripState, onLoad: (String) -> Unit, onViewMoreClicke
             if (strip.isLoading) {
                 items(4) { PlaceholderNode() }
             } else {
-                items(strip.contents) { content -> NodeComponent(content) }
+                items(strip.contents) { content ->
+                    NodeComponent(content) { action(PageAction.ContentClicked(content.id)) }
+                }
             }
         }
     }

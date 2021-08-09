@@ -22,6 +22,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.github.vbelles.billboard.data.model.Section
 import io.github.vbelles.billboard.ui.screens.PeopleScreen
+import io.github.vbelles.billboard.ui.screens.details.DetailsScreen
 import io.github.vbelles.billboard.ui.screens.grid.GridScreen
 import io.github.vbelles.billboard.ui.screens.page.PageScreen
 import org.koin.androidx.compose.getViewModel
@@ -49,6 +50,9 @@ fun NavigationComponent(sections: List<Section>, navController: NavHostControlle
         composable("grid/{source}") {
             val source = URLDecoder.decode(it.arguments?.getString("source"), "utf-8")
             GridScreen(navController, source)
+        }
+        composable("details/{id}") {
+            DetailsScreen(navController, it.arguments?.getString("id")!!)
         }
     }
 }

@@ -53,7 +53,7 @@ fun GridScreen(state: GridState, onBack: () -> Unit, loadMore: (Int) -> Unit) {
             items(20) { PlaceholderNode() }
         }
         items(state.contents) { content ->
-            NodeComponent(content)
+            NodeComponent(content){}
         }
     }
     Toolbar(title = "View More", alpha = 0.8f, onBack)

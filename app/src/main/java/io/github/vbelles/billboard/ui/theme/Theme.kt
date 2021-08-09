@@ -30,7 +30,7 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun BillboardTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (false) {
+    val colors = if (true) {
         DarkColorPalette
     } else {
         LightColorPalette

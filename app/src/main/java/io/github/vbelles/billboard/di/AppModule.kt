@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import io.github.vbelles.billboard.BuildConfig
 import io.github.vbelles.billboard.data.repository.content.ContentRepository
 import io.github.vbelles.billboard.data.repository.section.SectionRepository
+import io.github.vbelles.billboard.ui.screens.details.DetailsViewModel
 import io.github.vbelles.billboard.ui.screens.grid.GridViewModel
 import io.github.vbelles.billboard.ui.screens.main.MainViewModel
 import io.github.vbelles.billboard.ui.screens.page.PageViewModel
@@ -35,6 +36,7 @@ val appModule = module {
     viewModel { MainViewModel(get()) }
     viewModel { parameters -> PageViewModel(get(), parameters.get()) }
     viewModel { parameters -> GridViewModel(get(), parameters.get()) }
+    viewModel { parameters -> DetailsViewModel(get(), parameters.get()) }
 }
 
 private fun buildHttpClient(): OkHttpClient {
