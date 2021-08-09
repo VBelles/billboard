@@ -31,10 +31,16 @@ class ContentRepository(
         }
     }
 
+    suspend fun findContent(id: Int): Result<Content> {
+        return resultOf {
+            contentApiClient.findContent(id, apiKey, "en-US")
+        }.map { contentDto -> contentDto.toContent() }
+    }
+
     private fun ContentDto.toContent() = Content(
         id = id,
         adult = adult,
-        backdropPath = backdropPath,
+        backdropPath = imageBaseUrl + backdropPath,
         posterPath = imageBaseUrl + posterPath,
         genreIds = genreIds,
         title = title ?: name ?: "",

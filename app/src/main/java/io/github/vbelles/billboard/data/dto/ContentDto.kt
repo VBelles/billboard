@@ -9,7 +9,7 @@ data class ContentDto(
     @SerialName("adult") val adult: Boolean = false,
     @SerialName("backdrop_path") val backdropPath: String? = null,
     @SerialName("poster_path") val posterPath: String? = null,
-    @SerialName("genre_ids") val genreIds: List<Int>,
+    @SerialName("genre_ids") val genreIds: List<Int> = emptyList(),
     @SerialName("title") val title: String? = null,
     @SerialName("name") val name: String? = null,
     @SerialName("original_language") val originalLanguage: String,
