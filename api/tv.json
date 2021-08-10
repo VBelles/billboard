@@ -1,0 +1,29 @@
+{
+  "title": "TV Shows",
+  "header": {
+    "type": "tv",
+    "source": "latest"
+  },
+  "strips": [
+    {
+      "name": "Airing Today",
+      "type": "tv_shows",
+      "source": "airing_today"
+    },
+    {
+      "name": "On The Air",
+      "type": "tv",
+      "source": "on_the_air"
+    },
+    {
+      "name": "Popular",
+      "type": "tv",
+      "source": "tv/popular"
+    },
+    {
+      "name": "Top Rated",
+      "type": "tv",
+      "source": "top_rated"
+    }
+  ]
+}

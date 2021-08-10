@@ -1,0 +1,29 @@
+{
+  "title": "Movies",
+  "header": {
+    "type": "movie",
+    "source": "latest"
+  },
+  "strips": [
+    {
+      "title": "Now Playing",
+      "type": "movie",
+      "source": "now_playing"
+    },
+    {
+      "title": "Popular",
+      "type": "movie",
+      "source": "popular"
+    },
+    {
+      "title": "Top Rated",
+      "type": "movie",
+      "source": "top_rated"
+    },
+    {
+      "title": "Upcoming",
+      "type": "movie",
+      "source": "upcoming"
+    }
+  ]
+}
