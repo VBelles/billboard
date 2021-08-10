@@ -1,17 +1,19 @@
 package io.github.vbelles.billboard.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import io.github.vbelles.billboard.BuildConfig
+import io.github.vbelles.billboard.R
 import io.github.vbelles.billboard.data.repository.content.ContentRepository
 import io.github.vbelles.billboard.data.repository.section.SectionRepository
 import io.github.vbelles.billboard.ui.screens.details.DetailsViewModel
 import io.github.vbelles.billboard.ui.screens.grid.GridViewModel
 import io.github.vbelles.billboard.ui.screens.main.MainViewModel
 import io.github.vbelles.billboard.ui.screens.page.PageViewModel
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -22,15 +24,15 @@ val appModule = module {
     single<OkHttpClient> { buildHttpClient() }
     single<SectionRepository> {
         SectionRepository(
-            buildApiClient(BuildConfig.SECTIONS_API_URL, get()),
-            BuildConfig.SECTIONS_API_ENDPOINT
+            buildApiClient(androidContext().getString(R.string.sections_api_url), get()),
+            androidContext().getString(R.string.sections_api_endpoint)
         )
     }
     single<ContentRepository> {
         ContentRepository(
-            buildApiClient(BuildConfig.TMDB_API_URL, get()),
-            BuildConfig.TMDB_API_KEY,
-            BuildConfig.TMDB_IMAGE_URL
+            buildApiClient(androidContext().getString(R.string.tmdb_api_url), get()),
+            androidContext().getString(R.string.tmdb_api_key),
+            androidContext().getString(R.string.tmdb_image_url)
         )
     }
     viewModel { MainViewModel(get()) }
@@ -50,6 +52,7 @@ private val json = Json {
     ignoreUnknownKeys = true
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 private inline fun <reified T> buildApiClient(baseUrl: String, httpClient: OkHttpClient): T {
     return Retrofit.Builder()
         .client(httpClient)

@@ -18,11 +18,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        buildConfigField "String", "TMDB_API_KEY", tmdbApiKey
-        buildConfigField "String", "TMDB_API_URL", tmdbApiUrl
-        buildConfigField "String", "TMDB_IMAGE_URL", tmdbImageUrl
-        buildConfigField "String", "SECTIONS_API_URL", sectionsApiUrl
-        buildConfigField "String", "SECTIONS_API_ENDPOINT", sectionsApiEndpoint
+        resValue "string", "tmdb_api_key", tmdbApiKey
     }
 
     buildTypes {
