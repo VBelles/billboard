@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.google.accompanist.insets.navigationBarsPadding
 import io.github.vbelles.billboard.ui.components.Toolbar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -37,7 +38,7 @@ fun DetailsScreen(navController: NavController, id: Int) {
 @Composable
 fun DetailsScreen(state: DetailsState, action: (DetailsAction) -> Unit) {
     val scrollState = rememberScrollState()
-    Column(Modifier.verticalScroll(scrollState)) {
+    Column(Modifier.verticalScroll(scrollState).navigationBarsPadding()) {
         Box {
             Image(
                 painter = rememberImagePainter(state.backdrop),
