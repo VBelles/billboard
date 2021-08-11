@@ -6,22 +6,22 @@
   },
   "strips": [
     {
-      "name": "Airing Today",
+      "title": "Airing Today",
       "type": "tv_shows",
       "source": "airing_today"
     },
     {
-      "name": "On The Air",
+      "title": "On The Air",
       "type": "tv",
       "source": "on_the_air"
     },
     {
-      "name": "Popular",
+      "title": "Popular",
       "type": "tv",
       "source": "tv/popular"
     },
     {
-      "name": "Top Rated",
+      "title": "Top Rated",
       "type": "tv",
       "source": "top_rated"
     }
