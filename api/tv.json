@@ -7,7 +7,7 @@
   "strips": [
     {
       "title": "Airing Today",
-      "type": "tv_shows",
+      "type": "tv",
       "source": "airing_today"
     },
     {
@@ -18,7 +18,7 @@
     {
       "title": "Popular",
       "type": "tv",
-      "source": "tv/popular"
+      "source": "popular"
     },
     {
       "title": "Top Rated",
