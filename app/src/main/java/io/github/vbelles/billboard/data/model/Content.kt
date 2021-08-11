@@ -2,6 +2,7 @@ package io.github.vbelles.billboard.data.model
 
 data class Content(
     val id: Int,
+    val type: ContentType,
     val adult: Boolean,
     val backdropPath: String?,
     val posterPath: String?,

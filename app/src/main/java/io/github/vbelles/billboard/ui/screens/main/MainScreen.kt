@@ -1,65 +1,28 @@
 package io.github.vbelles.billboard.ui.screens.main
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import io.github.vbelles.billboard.data.model.Section
-import io.github.vbelles.billboard.ui.screens.PeopleScreen
-import io.github.vbelles.billboard.ui.screens.details.DetailsScreen
-import io.github.vbelles.billboard.ui.screens.grid.GridScreen
-import io.github.vbelles.billboard.ui.screens.page.PageScreen
-import org.koin.androidx.compose.getViewModel
-import java.net.URLDecoder
+import io.github.vbelles.billboard.R
+import io.github.vbelles.billboard.ui.Screen
+
+data class ScreenNavigationItem(val screen: Screen, val iconRes: Int, val titleRes: Int)
+
 
 @Composable
 fun MainScreen() {
-    val viewModel: MainViewModel = getViewModel()
-    val state by viewModel.state.collectAsState()
-    MainScreen(state)
-}
-
-@Composable
-fun NavigationComponent(sections: List<Section>, navController: NavHostController, innerPadding: PaddingValues) {
-    if (sections.isEmpty()) return
-    NavHost(navController, startDestination = sections.first().name) {
-        sections.forEach { section ->
-            composable(section.name) {
-                when (section.sectionType) {
-                    Section.SectionType.Page -> PageScreen(navController, section, innerPadding)
-                    Section.SectionType.People -> PeopleScreen(navController, section.name)
-                }
-            }
-        }
-        composable("grid/{source}") {
-            val source = URLDecoder.decode(it.arguments?.getString("source"), "utf-8")
-            GridScreen(navController, source)
-        }
-        composable("details/{id}") {
-            DetailsScreen(navController, it.arguments?.getString("id")?.toInt()!!)
-        }
-    }
-}
-
-
-@Composable
-fun MainScreen(state: SectionsState) {
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
     val bottomAppBarColor = MaterialTheme.colors.surface.copy(alpha = 0.95f)
@@ -71,33 +34,42 @@ fun MainScreen(state: SectionsState) {
 
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val isRootScreen = state.sections.any { section -> navBackStackEntry?.destination?.route == section.name }
+
+    val items = remember {
+        listOf(
+            ScreenNavigationItem(Screen.Movies, R.drawable.ic_movies, R.string.movies_title),
+            ScreenNavigationItem(Screen.TvShows, R.drawable.ic_tv_shows, R.string.tv_shows_title),
+            ScreenNavigationItem(Screen.Movies, R.drawable.ic_people, R.string.people_title),
+        )
+    }
+
+    val isRootScreen = items.any { item -> navBackStackEntry?.destination?.route == item.screen.route }
 
     Scaffold(
         bottomBar = {
-            if (state.sections.isNotEmpty() && isRootScreen) {
-                BottomBar(navController, bottomAppBarColor, state.sections)
+            if (isRootScreen) {
+                BottomBar(navController, bottomAppBarColor, items)
             }
         }
     ) { innerPadding ->
-        NavigationComponent(state.sections, navController, innerPadding)
+        NavigationComponent(navController, innerPadding)
     }
 }
 
 @Composable
-fun BottomBar(navController: NavController, color: Color, sections: List<Section>) {
+fun BottomBar(navController: NavController, color: Color, navigationItems: List<ScreenNavigationItem>) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     BottomNavigation(
         backgroundColor = color,
         modifier = Modifier.navigationBarsPadding()
     ) {
-        sections.forEach { section ->
+        navigationItems.forEach { item ->
             BottomNavigationItem(
-                icon = { Icon(painterResource(section.icon), section.name) },
-                label = { Text(section.name) },
-                selected = section.name == navBackStackEntry?.destination?.route,
+                icon = { Icon(painterResource(item.iconRes), null) },
+                label = { Text(stringResource(item.titleRes)) },
+                selected = item.screen.route == navBackStackEntry?.destination?.route,
                 onClick = {
-                    navController.navigate(section.name) {
+                    navController.navigate(item.screen.route) {
                         popUpTo(0) { saveState = true }
                         launchSingleTop = true
                         restoreState = true
@@ -108,14 +80,8 @@ fun BottomBar(navController: NavController, color: Color, sections: List<Section
     }
 }
 
-@Composable
-private fun painterResource(name: String): Painter {
-    val context = LocalContext.current
-    return painterResource(context.resources.getIdentifier(name, "drawable", context.packageName))
-}
-
 @Preview
 @Composable
 fun MainScreenPreview() {
-    MainScreen(SectionsState())
+    MainScreen()
 }

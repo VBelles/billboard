@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import io.github.vbelles.billboard.data.model.ContentType
 import io.github.vbelles.billboard.ui.components.NodeComponent
 import io.github.vbelles.billboard.ui.components.PlaceholderNode
 import io.github.vbelles.billboard.ui.components.Toolbar
@@ -23,8 +24,8 @@ import org.koin.core.parameter.parametersOf
 
 
 @Composable
-fun GridScreen(navController: NavController, source: String) {
-    val viewModel: GridViewModel = getViewModel { parametersOf(source) }
+fun GridScreen(navController: NavController, source: String, contentType: ContentType) {
+    val viewModel: GridViewModel = getViewModel { parametersOf(source, contentType) }
     val state by viewModel.state.collectAsState()
     GridScreen(state, { navController.popBackStack() }) { lastVisibleIndex ->
         viewModel.loadMore(lastVisibleIndex)
@@ -53,7 +54,7 @@ fun GridScreen(state: GridState, onBack: () -> Unit, loadMore: (Int) -> Unit) {
             items(20) { PlaceholderNode() }
         }
         items(state.contents) { content ->
-            NodeComponent(content){}
+            NodeComponent(content) {}
         }
     }
     Toolbar(title = "View More", alpha = 0.8f, onBack)

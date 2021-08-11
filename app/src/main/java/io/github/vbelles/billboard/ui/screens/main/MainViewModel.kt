@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val sectionRepository: SectionRepository) : ViewModel() {
 
-    private val _state = MutableStateFlow(SectionsState(isLoading = true))
+    /*private val _state = MutableStateFlow(SectionsState(isLoading = true))
     val state: StateFlow<SectionsState> = _state.asStateFlow()
 
     init {
@@ -21,6 +21,6 @@ class MainViewModel(private val sectionRepository: SectionRepository) : ViewMode
                 _state.update { SectionsState(sections = result.getOrThrow()) }
             }
         }
-    }
+    }*/
 
 }

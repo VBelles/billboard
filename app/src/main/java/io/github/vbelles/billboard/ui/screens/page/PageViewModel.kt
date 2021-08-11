@@ -3,33 +3,58 @@ package io.github.vbelles.billboard.ui.screens.page
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.vbelles.billboard.data.model.Content
+import io.github.vbelles.billboard.data.model.ContentType
 import io.github.vbelles.billboard.data.model.Section
 import io.github.vbelles.billboard.data.repository.content.ContentRepository
+import io.github.vbelles.billboard.data.repository.section.SectionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PageViewModel(private val contentRepository: ContentRepository, section: Section) : ViewModel() {
+class PageViewModel(
+    sectionId: String,
+    private val title: String,
+    private val contentRepository: ContentRepository,
+    private val sectionRepository: SectionRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(
         PageState(
-            title = section.name,
-            strips = section.strips.map { strip ->
-                StripState(
-                    isLoading = true,
-                    source = strip.source,
-                    title = strip.name
-                )
-            }
+            isLoading = true,
+            title = title,
         )
     )
     val state: StateFlow<PageState> = _state.asStateFlow()
 
-    fun loadStrip(source: String) {
+    init {
         viewModelScope.launch {
-            contentRepository.listContents(source)
+            sectionRepository.getSection(sectionId)
+                .onSuccess { section -> onSectionLoaded(section) }
+                .onFailure { println("Failure $it") }
+        }
+    }
+
+    private fun onSectionLoaded(section: Section) {
+        _state.update {
+            PageState(
+                title = title,
+                strips = section.strips.map { strip ->
+                    StripState(
+                        isLoading = true,
+                        source = strip.source,
+                        title = strip.title,
+                        contentType = strip.contentType,
+                    )
+                })
+        }
+    }
+
+
+    fun loadStrip(source: String, contentType: ContentType) {
+        viewModelScope.launch {
+            contentRepository.listContents(source, contentType)
                 .onSuccess { contents -> onStripLoaded(source, contents) }
                 .onFailure { onStripError(source) }
         }

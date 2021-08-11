@@ -2,6 +2,7 @@ package io.github.vbelles.billboard.data.repository.content
 
 import io.github.vbelles.billboard.data.dto.ContentDto
 import io.github.vbelles.billboard.data.model.Content
+import io.github.vbelles.billboard.data.model.ContentType
 import io.github.vbelles.billboard.data.model.PagedContents
 import io.github.vbelles.billboard.data.resultOf
 
@@ -11,34 +12,35 @@ class ContentRepository(
     private val imageBaseUrl: String
 ) {
 
-    suspend fun listContents(source: String): Result<List<Content>> {
+    suspend fun listContents(source: String, contentType: ContentType): Result<List<Content>> {
         return resultOf {
-            contentApiClient.listContents(source, apiKey, "en-US", 1)
+            contentApiClient.listContents(source, contentType.id, apiKey, "en-US", 1)
         }.map { pagedContentsDto ->
-            pagedContentsDto.results.map { dto -> dto.toContent() }
+            pagedContentsDto.results.map { dto -> dto.toContent(contentType) }
         }
     }
 
-    suspend fun listPagedContents(source: String, page: Int): Result<PagedContents> {
+    suspend fun listPagedContents(source: String, contentType: ContentType, page: Int): Result<PagedContents> {
         return resultOf {
-            contentApiClient.listContents(source, apiKey, "en-US", page)
+            contentApiClient.listContents(source, contentType.id, apiKey, "en-US", page)
         }.map { pagedContentsDto ->
             PagedContents(
-                contents = pagedContentsDto.results.map { dto -> dto.toContent() },
+                contents = pagedContentsDto.results.map { dto -> dto.toContent(contentType) },
                 nextPage = (pagedContentsDto.page + 1).takeIf { pagedContentsDto.totalPages > pagedContentsDto.page },
                 page = pagedContentsDto.page,
             )
         }
     }
 
-    suspend fun findContent(id: Int): Result<Content> {
+    suspend fun findContent(id: Int, contentType: ContentType): Result<Content> {
         return resultOf {
-            contentApiClient.findContent(id, apiKey, "en-US")
-        }.map { contentDto -> contentDto.toContent() }
+            contentApiClient.findContent(id, contentType.id, apiKey, "en-US")
+        }.map { contentDto -> contentDto.toContent(contentType) }
     }
 
-    private fun ContentDto.toContent() = Content(
+    private fun ContentDto.toContent(contentType: ContentType) = Content(
         id = id,
+        type = contentType,
         adult = adult,
         backdropPath = imageBaseUrl + backdropPath,
         posterPath = imageBaseUrl + posterPath,

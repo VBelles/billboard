@@ -3,12 +3,12 @@ package io.github.vbelles.billboard.data.repository.section
 import io.github.vbelles.billboard.data.dto.SectionDto
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Url
+import retrofit2.http.Path
 
 
 interface SectionApiClient {
 
-    @GET
-    suspend fun listSections(@Url endpoint: String): Response<List<SectionDto>>
+    @GET("{id}.json")
+    suspend fun getSection(@Path("id") id: String): Response<SectionDto>
 
 }

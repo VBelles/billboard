@@ -3,6 +3,5 @@
     <!--    <string name="tmdb_api_key">API KEY</string>-->
     <string name="tmdb_api_url">https://api.themoviedb.org/3/</string>
     <string name="tmdb_image_url">https://image.tmdb.org/t/p/w300</string>
-    <string name="sections_api_url">https://firebasestorage.googleapis.com/v0/b/vbelles-billboard.appspot.com/o/</string>
-    <string name="sections_api_endpoint">sections.json?alt=media&amp;token=8936f44d-7346-4028-9be4-0908d752c402</string>
+    <string name="sections_api_url">https://raw.githubusercontent.com/VBelles/billboard/master/api/</string>
 </resources>

@@ -5,8 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SectionDto(
-    @SerialName("name") val name: String,
-    @SerialName("icon") val icon: String,
-    @SerialName("sectionType") val sectionType: String,
+    @SerialName("title") val title: String,
+    @SerialName("header") val header: HeaderDto? = null,
     @SerialName("strips") val strips: List<StripDto> = emptyList(),
 )

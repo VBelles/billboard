@@ -22,13 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
+import io.github.vbelles.billboard.data.model.ContentType
 import io.github.vbelles.billboard.ui.components.Toolbar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun DetailsScreen(navController: NavController, id: Int) {
-    val viewModel: DetailsViewModel = getViewModel { parametersOf(id) }
+fun DetailsScreen(navController: NavController, id: Int, contentType: ContentType) {
+    val viewModel: DetailsViewModel = getViewModel { parametersOf(id, contentType) }
     val state by viewModel.state.collectAsState()
     DetailsScreen(state) {
 

@@ -4,8 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class StripDto(
-    @SerialName("title") val title: String,
+data class HeaderDto(
     @SerialName("type") val contentType: String,
     @SerialName("source") val source: String,
 )

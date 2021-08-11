@@ -6,23 +6,24 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.Url
 
 
 interface ContentApiClient {
 
-    @GET
+    @GET("{content_type}/{id}")
     suspend fun listContents(
-        @Url source: String,
+        @Path("id") id: String,
+        @Path("content_type") contentType: String,
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("page") page: Int,
         @Query("region") region: String? = null,
     ): Response<PagedContentsDto>
 
-    @GET("movie/{id}")
+    @GET("{content_type}/{id}")
     suspend fun findContent(
         @Path("id") id: Int,
+        @Path("content_type") contentType: String,
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("region") region: String? = null,

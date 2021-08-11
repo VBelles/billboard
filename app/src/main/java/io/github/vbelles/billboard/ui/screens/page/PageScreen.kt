@@ -19,25 +19,26 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import io.github.vbelles.billboard.data.model.Section
+import io.github.vbelles.billboard.ui.Screen
 import io.github.vbelles.billboard.ui.components.NodeComponent
 import io.github.vbelles.billboard.ui.components.PlaceholderNode
 import io.github.vbelles.billboard.ui.components.Toolbar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
-import java.net.URLEncoder
 import kotlin.math.min
 
 @Composable
-fun PageScreen(navController: NavController, section: Section, innerPadding: PaddingValues) {
-    val viewModel: PageViewModel = getViewModel { parametersOf(section) }
+fun PageScreen(navController: NavController, title: String, sectionId: String, innerPadding: PaddingValues) {
+    val viewModel: PageViewModel = getViewModel { parametersOf(sectionId, title) }
     val pageState by viewModel.state.collectAsState()
     PageScreen(pageState, innerPadding) { action ->
         when (action) {
-            is PageAction.ContentClicked -> navController.navigate("details/${action.id}")
-            is PageAction.StripDisplayed -> viewModel.loadStrip(action.source)
+            is PageAction.ContentClicked ->
+                navController.navigate(Screen.Details.parametrized(action.contentId, action.contentType))
+            is PageAction.StripDisplayed ->
+                viewModel.loadStrip(action.source, action.contentType)
             is PageAction.ViewMoreClicked ->
-                navController.navigate("grid/${URLEncoder.encode(action.source, "utf-8")}")
+                navController.navigate(Screen.Grid.parametrized(action.source, action.contentType))
         }
     }
 }
@@ -68,7 +69,7 @@ fun PageScreen(pageState: PageState, innerPadding: PaddingValues, action: (PageA
 @Composable
 fun StripComponent(strip: StripState, action: (PageAction) -> Unit) {
     LaunchedEffect(strip.source) {
-        action(PageAction.StripDisplayed(strip.source))
+        action(PageAction.StripDisplayed(strip.source, strip.contentType))
     }
     Column {
         Row {
@@ -83,7 +84,7 @@ fun StripComponent(strip: StripState, action: (PageAction) -> Unit) {
                 style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier
-                    .clickable { action(PageAction.ViewMoreClicked(strip.source)) }
+                    .clickable { action(PageAction.ViewMoreClicked(strip.source, strip.contentType)) }
                     .padding(4.dp),
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -98,7 +99,7 @@ fun StripComponent(strip: StripState, action: (PageAction) -> Unit) {
                 items(4) { PlaceholderNode() }
             } else {
                 items(strip.contents) { content ->
-                    NodeComponent(content) { action(PageAction.ContentClicked(content.id)) }
+                    NodeComponent(content) { action(PageAction.ContentClicked(content.id, content.type)) }
                 }
             }
         }

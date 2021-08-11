@@ -23,10 +23,7 @@ import retrofit2.create
 val appModule = module {
     single<OkHttpClient> { buildHttpClient() }
     single<SectionRepository> {
-        SectionRepository(
-            buildApiClient(androidContext().getString(R.string.sections_api_url), get()),
-            androidContext().getString(R.string.sections_api_endpoint)
-        )
+        SectionRepository(buildApiClient(androidContext().getString(R.string.sections_api_url), get()))
     }
     single<ContentRepository> {
         ContentRepository(
@@ -36,9 +33,9 @@ val appModule = module {
         )
     }
     viewModel { MainViewModel(get()) }
-    viewModel { parameters -> PageViewModel(get(), parameters.get()) }
-    viewModel { parameters -> GridViewModel(get(), parameters.get()) }
-    viewModel { parameters -> DetailsViewModel(get(), parameters.get()) }
+    viewModel { parameters -> PageViewModel(parameters[0], parameters[1], get(), get()) }
+    viewModel { parameters -> GridViewModel(get(), parameters[0], parameters[1]) }
+    viewModel { parameters -> DetailsViewModel(get(), parameters[0], parameters[1]) }
 }
 
 private fun buildHttpClient(): OkHttpClient {

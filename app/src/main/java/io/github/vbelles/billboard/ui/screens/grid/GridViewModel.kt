@@ -2,13 +2,14 @@ package io.github.vbelles.billboard.ui.screens.grid
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.vbelles.billboard.data.model.ContentType
 import io.github.vbelles.billboard.data.repository.content.ContentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class GridViewModel(private val contentRepository: ContentRepository, private val source: String) : ViewModel() {
+class GridViewModel(private val contentRepository: ContentRepository, private val source: String, private val contentType: ContentType) : ViewModel() {
 
     private val _state = MutableStateFlow(GridState())
     val state: StateFlow<GridState> = _state
@@ -25,7 +26,7 @@ class GridViewModel(private val contentRepository: ContentRepository, private va
     }
 
     private suspend fun loadPage(page: Int) {
-        contentRepository.listPagedContents(source, page)
+        contentRepository.listPagedContents(source, contentType, page)
             .onSuccess { pagedContents ->
                 _state.update { state ->
                     state.copy(
