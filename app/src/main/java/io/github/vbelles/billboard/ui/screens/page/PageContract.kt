@@ -5,7 +5,7 @@ import io.github.vbelles.billboard.data.model.ContentType
 
 
 sealed interface PageAction {
-    data class StripDisplayed(val source: String, val contentType: ContentType) : PageAction
+    data class StripDisplayed(val stripState: StripState) : PageAction
     data class ViewMoreClicked(val source: String, val contentType: ContentType) : PageAction
     data class ContentClicked(val contentId: Int, val contentType: ContentType) : PageAction
 }

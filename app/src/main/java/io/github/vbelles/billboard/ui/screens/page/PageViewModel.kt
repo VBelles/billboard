@@ -3,7 +3,6 @@ package io.github.vbelles.billboard.ui.screens.page
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.vbelles.billboard.data.model.Content
-import io.github.vbelles.billboard.data.model.ContentType
 import io.github.vbelles.billboard.data.model.Section
 import io.github.vbelles.billboard.data.repository.content.ContentRepository
 import io.github.vbelles.billboard.data.repository.section.SectionRepository
@@ -51,12 +50,11 @@ class PageViewModel(
         }
     }
 
-
-    fun loadStrip(source: String, contentType: ContentType) {
+    fun loadStrip(stripState: StripState) {
         viewModelScope.launch {
-            contentRepository.listContents(source, contentType)
-                .onSuccess { contents -> onStripLoaded(source, contents) }
-                .onFailure { onStripError(source) }
+            contentRepository.listContents(stripState.source, stripState.contentType)
+                .onSuccess { contents -> onStripLoaded(stripState.source, contents) }
+                .onFailure { onStripError(stripState.source) }
         }
     }
 

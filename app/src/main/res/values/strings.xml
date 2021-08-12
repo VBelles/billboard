@@ -3,4 +3,5 @@
     <string name="movies_title">Movies</string>
     <string name="tv_shows_title">TV Shows</string>
     <string name="people_title">People</string>
+    <string name="strip_more">More</string>
 </resources>

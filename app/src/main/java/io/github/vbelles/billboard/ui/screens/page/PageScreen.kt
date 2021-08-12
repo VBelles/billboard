@@ -14,11 +14,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import io.github.vbelles.billboard.R
 import io.github.vbelles.billboard.ui.Screen
 import io.github.vbelles.billboard.ui.components.NodeComponent
 import io.github.vbelles.billboard.ui.components.PlaceholderNode
@@ -28,15 +30,15 @@ import org.koin.core.parameter.parametersOf
 import kotlin.math.min
 
 @Composable
-fun PageScreen(navController: NavController, title: String, sectionId: String, innerPadding: PaddingValues) {
+fun PageScreen(navController: NavController, title: String, sectionId: String) {
     val viewModel: PageViewModel = getViewModel { parametersOf(sectionId, title) }
     val pageState by viewModel.state.collectAsState()
-    PageScreen(pageState, innerPadding) { action ->
+    PageScreen(pageState) { action ->
         when (action) {
             is PageAction.ContentClicked ->
                 navController.navigate(Screen.Details.parametrized(action.contentId, action.contentType))
             is PageAction.StripDisplayed ->
-                viewModel.loadStrip(action.source, action.contentType)
+                viewModel.loadStrip(action.stripState)
             is PageAction.ViewMoreClicked ->
                 navController.navigate(Screen.Grid.parametrized(action.source, action.contentType))
         }
@@ -44,14 +46,14 @@ fun PageScreen(navController: NavController, title: String, sectionId: String, i
 }
 
 @Composable
-fun PageScreen(pageState: PageState, innerPadding: PaddingValues, action: (PageAction) -> Unit) {
+fun PageScreen(pageState: PageState, action: (PageAction) -> Unit) {
     val listState = rememberLazyListState()
     LazyColumn(
         state = listState,
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
             additionalTop = 56.dp,
-            additionalBottom = innerPadding.calculateBottomPadding()
+            additionalBottom = 80.dp
         )
     ) {
         items(pageState.strips, { strip -> strip.source }) { strip ->
@@ -69,7 +71,7 @@ fun PageScreen(pageState: PageState, innerPadding: PaddingValues, action: (PageA
 @Composable
 fun StripComponent(strip: StripState, action: (PageAction) -> Unit) {
     LaunchedEffect(strip.source) {
-        action(PageAction.StripDisplayed(strip.source, strip.contentType))
+        action(PageAction.StripDisplayed(strip))
     }
     Column {
         Row {
@@ -80,7 +82,7 @@ fun StripComponent(strip: StripState, action: (PageAction) -> Unit) {
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "View more",
+                text = stringResource(R.string.strip_more),
                 style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier

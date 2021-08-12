@@ -39,7 +39,10 @@ fun DetailsScreen(navController: NavController, id: Int, contentType: ContentTyp
 @Composable
 fun DetailsScreen(state: DetailsState, action: (DetailsAction) -> Unit) {
     val scrollState = rememberScrollState()
-    Column(Modifier.verticalScroll(scrollState).navigationBarsPadding()) {
+    Column(
+        Modifier
+            .verticalScroll(scrollState)
+            .navigationBarsPadding()) {
         Box {
             Image(
                 painter = rememberImagePainter(state.backdrop),

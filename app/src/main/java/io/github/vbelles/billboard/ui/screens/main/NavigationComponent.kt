@@ -1,6 +1,5 @@
 package io.github.vbelles.billboard.ui.screens.main
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -15,13 +14,13 @@ import io.github.vbelles.billboard.ui.screens.grid.GridScreen
 import io.github.vbelles.billboard.ui.screens.page.PageScreen
 
 @Composable
-fun NavigationComponent(navController: NavHostController, innerPadding: PaddingValues) {
+fun NavigationComponent(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Movies.route) {
         composable(Screen.Movies.route) {
-            PageScreen(navController, stringResource(R.string.movies_title), "movies", innerPadding)
+            PageScreen(navController, stringResource(R.string.movies_title), "movies")
         }
         composable(Screen.TvShows.route) {
-            PageScreen(navController, stringResource(R.string.tv_shows_title), "tv", innerPadding)
+            PageScreen(navController, stringResource(R.string.tv_shows_title), "tv")
         }
         composable(Screen.People.route) {
             PeopleScreen(navController, stringResource(R.string.people_title))
