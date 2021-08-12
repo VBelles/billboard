@@ -17,7 +17,7 @@ class DetailsViewModel(private val contentRepository: ContentRepository, private
 
     init {
         viewModelScope.launch {
-            contentRepository.findContent(id, contentType).also { println(it) }.onSuccess { content ->
+            contentRepository.findContent(id, contentType).onSuccess { content ->
                 _state.update {
                     DetailsState(
                         title = content.title,

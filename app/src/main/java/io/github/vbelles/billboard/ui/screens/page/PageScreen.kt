@@ -54,7 +54,7 @@ fun PageScreen(pageState: PageState, innerPadding: PaddingValues, action: (PageA
             additionalBottom = innerPadding.calculateBottomPadding()
         )
     ) {
-        items(pageState.strips) { strip ->
+        items(pageState.strips, { strip -> strip.source }) { strip ->
             Spacer(modifier = Modifier.size(20.dp))
             StripComponent(strip, action)
         }

@@ -9,7 +9,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class GridViewModel(private val contentRepository: ContentRepository, private val source: String, private val contentType: ContentType) : ViewModel() {
+class GridViewModel(
+    private val contentRepository: ContentRepository,
+    private val source: String,
+    private val contentType: ContentType
+) : ViewModel() {
 
     private val _state = MutableStateFlow(GridState())
     val state: StateFlow<GridState> = _state

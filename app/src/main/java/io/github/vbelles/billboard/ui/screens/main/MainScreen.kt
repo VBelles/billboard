@@ -4,7 +4,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -20,6 +19,11 @@ import io.github.vbelles.billboard.ui.Screen
 
 data class ScreenNavigationItem(val screen: Screen, val iconRes: Int, val titleRes: Int)
 
+private val navigationItems = listOf(
+    ScreenNavigationItem(Screen.Movies, R.drawable.ic_movies, R.string.movies_title),
+    ScreenNavigationItem(Screen.TvShows, R.drawable.ic_tv_shows, R.string.tv_shows_title),
+    ScreenNavigationItem(Screen.People, R.drawable.ic_people, R.string.people_title),
+)
 
 @Composable
 fun MainScreen() {
@@ -33,22 +37,13 @@ fun MainScreen() {
     }
 
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-    val items = remember {
-        listOf(
-            ScreenNavigationItem(Screen.Movies, R.drawable.ic_movies, R.string.movies_title),
-            ScreenNavigationItem(Screen.TvShows, R.drawable.ic_tv_shows, R.string.tv_shows_title),
-            ScreenNavigationItem(Screen.Movies, R.drawable.ic_people, R.string.people_title),
-        )
-    }
-
-    val isRootScreen = items.any { item -> navBackStackEntry?.destination?.route == item.screen.route }
 
     Scaffold(
         bottomBar = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val isRootScreen = navigationItems.any { item -> navBackStackEntry?.destination?.route == item.screen.route }
             if (isRootScreen) {
-                BottomBar(navController, bottomAppBarColor, items)
+                BottomBar(navController, bottomAppBarColor, navigationItems)
             }
         }
     ) { innerPadding ->
