@@ -17,7 +17,7 @@ import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 import io.github.vbelles.billboard.data.model.Content
 
-private val NodeCorner = 18.dp
+private val NodeCorner = 16.dp
 private val NodeWidth = 120.dp
 private const val NodeAspectRatio = 2 / 3f
 
@@ -45,5 +45,4 @@ fun PlaceholderNode() {
                 .placeholder(visible = true, highlight = PlaceholderHighlight.shimmer()),
         )
     }
-
 }
